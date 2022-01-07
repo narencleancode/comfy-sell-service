@@ -31,3 +31,13 @@ $ yarn run test:e2e
 # test coverage
 $ yarn run test:cov
 ```
+
+## Local Development
+### Database setup
+```bash
+# start database
+./scripts/start-database.sh
+
+# stop database
+./scripts/stop-database.sh
+```
