@@ -12,7 +12,9 @@ export class Image {
   thumbnailUrl?: string;
 }
 
-@Schema()
+const COLLECTION_NAME = 'productcatalog';
+
+@Schema({ collection: COLLECTION_NAME })
 export class ProductCatalog {
   @Prop()
   productCode: string;
@@ -39,4 +41,5 @@ export class ProductCatalog {
   image: Image;
 }
 
-export const ProductCatalogSchema = SchemaFactory.createForClass(ProductCatalog);
+export const ProductCatalogSchema =
+  SchemaFactory.createForClass(ProductCatalog);

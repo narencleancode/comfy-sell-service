@@ -9,7 +9,7 @@ $ yarn install
 ## Running the app
 
 ### Setup
-- Create a file with name `.env` in project root and add configuration values (refer `.env.sample` file)
+- Create a file with name `.env` in project root and add configuration values (refer `.env.local` file)
 
 ```bash
 # development

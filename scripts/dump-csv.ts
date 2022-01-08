@@ -40,6 +40,7 @@ function getCsvData(): Promise<any[]> {
 async function seedData() {
   mongooseConnection = await mongoose.connect(process.env.MONGO_URL, {
     authSource: 'admin',
+    dbName: process.env.DB_NAME,
   });
 
   const csvData = await getCsvData();
