@@ -1,43 +1,42 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
-export type CatalogDocument = Catalog & Document;
+export type ProductCatalogDocument = ProductCatalog & Document;
 
 @Schema()
-export class ImageData {
-    @Prop()
-    full: string;
+export class Image {
+  @Prop()
+  url: string;
 
-    @Prop()
-    thumb: string;
+  @Prop()
+  thumbnailUrl?: string;
 }
 
 @Schema()
-export class Catalog {
-    @Prop()
-    barcode: string;
+export class ProductCatalog {
+  @Prop()
+  productCode: string;
 
-    @Prop()
-    name: string;
+  @Prop()
+  title: string;
 
-    @Prop()
-    maxRetailPrice: number;
+  @Prop()
+  category: string;
 
-    @Prop()
-    weight?: number;
+  @Prop()
+  subCategory: string;
 
-    @Prop()
-    unit?: string;
+  @Prop()
+  unit?: string;
 
-    @Prop()
-    category: string;
+  @Prop()
+  weight?: number;
 
-    @Prop()
-    subCategory: string;
+  @Prop()
+  maximumRetailPrice: number;
 
-    @Prop()
-    image: ImageData;
-
+  @Prop()
+  image: Image;
 }
 
-export const CatalogSchema = SchemaFactory.createForClass(Catalog);
+export const ProductCatalogSchema = SchemaFactory.createForClass(ProductCatalog);

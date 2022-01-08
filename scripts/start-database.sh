@@ -1,4 +1,5 @@
 #!/bin/sh
+set -e
 source $(dirname $0)/common.sh
 
 echo "Starting MongoDB"
