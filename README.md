@@ -8,6 +8,9 @@ $ yarn install
 
 ## Running the app
 
+### Setup
+- Create a file with name `.env` in project root and add configuration values (refer `.env.sample` file)
+
 ```bash
 # development
 $ yarn run start
@@ -40,4 +43,11 @@ $ yarn run test:cov
 
 # stop database
 ./scripts/stop-database.sh
+```
+
+### Setup
+Add the provided `catalog_sample.csv` into `scripts` directory and run
+```bash
+# seed data
+yarn loadData
 ```
