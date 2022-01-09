@@ -13,4 +13,11 @@ export class ProductCatalogController {
   ): Promise<ProductCatalog[]> {
     return await this.productCatalogService.getProductCatalog(searchTerm, page);
   }
+
+  @Get('curated-list')
+  async getCuratedProductCatalogs(
+      @Query('count') count: number = 20,
+  ): Promise<ProductCatalog[]> {
+    return await this.productCatalogService.getCuratedProductCatalog(count);
+  }
 }

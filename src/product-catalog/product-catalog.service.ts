@@ -22,6 +22,20 @@ export class ProductCatalogService {
     return this.withPagination(this.getQuery(searchTerm), page).exec();
   }
 
+  async getCuratedProductCatalog(
+      count: number,
+  ): Promise<ProductCatalog[]> {
+    return this.productCatalogModel
+        .find({})
+        .collation({
+          locale: 'en',
+        })
+        .sort({
+          listingScore: -1,
+        })
+        .limit(count);
+  }
+
   private getQuery(searchTerm?: string) {
     if (!!searchTerm && !!searchTerm.trim()) {
       return this.getQueryForSearch(searchTerm);
