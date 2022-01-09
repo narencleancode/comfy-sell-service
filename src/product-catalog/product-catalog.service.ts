@@ -15,7 +15,7 @@ export class ProductCatalogService {
 
     async getProductCatalog(
         searchTerm?: string,
-        filterBy?: CatalogFilterBy,
+        filterBy?: string,
         page?: number,
     ): Promise<ProductCatalog[]> {
         return this.withPagination(this.getQuery(searchTerm, filterBy), page).exec();
@@ -29,10 +29,10 @@ export class ProductCatalogService {
         }).exec();
     }
 
-    private getQuery(searchTerm?: string, filterBy?: CatalogFilterBy) {
+    private getQuery(searchTerm?: string, filterBy?: string) {
         if (!!searchTerm && !!searchTerm.trim()) {
             return this.getQueryForSearch(searchTerm);
-        } else if (filterBy == CatalogFilterBy.CURATED_LIST) {
+        } else if (filterBy == 'CURATED_LIST') {
             return this.getQueryForCuratedProducts()
         }
 
