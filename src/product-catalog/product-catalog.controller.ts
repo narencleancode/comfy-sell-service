@@ -9,7 +9,8 @@ export class ProductCatalogController {
   @Get()
   async getProductCatalog(
     @Query('q') searchTerm?: string,
+    @Query('page') page: number = 1,
   ): Promise<ProductCatalog[]> {
-    return await this.productCatalogService.getProductCatalog(searchTerm);
+    return await this.productCatalogService.getProductCatalog(searchTerm, page);
   }
 }
