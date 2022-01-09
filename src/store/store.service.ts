@@ -18,23 +18,24 @@ export class StoreService {
     }
 
     async addStoreCatalog(id: string, storeCatalog: StoreCatalog) {
-        return this.storeModel.findOneAndUpdate({
-            'code': {$eq: id}
-        }, {
-            "$push": {
-                "storeCatalogs": storeCatalog
-            }
-        }, {new: true, upsert: true}).exec()
-    }
-
-    async updateStoreCatalog(id: string, productId: string, storeCatalog: StoreCatalog) {
-        return this.storeModel.findOneAndUpdate({
-            'code': {$eq: id},
-            'storeCatalogs.productCode': {$eq: productId}
-        }, {
-            "$set": {
-                "storeCatalogs.$": storeCatalog
-            }
-        }, {new: true, upsert: true}).exec()
+        const store = await this.storeModel.findOne({'code':{$eq: id}}).exec();
+        if(store.storeCatalogs.find(value => value.productCode == storeCatalog.productCode)) {
+            return this.storeModel.findOneAndUpdate({
+                'code': {$eq: id},
+                'storeCatalogs.productCode': {$eq: storeCatalog.productCode}
+            }, {
+                "$set": {
+                    "storeCatalogs.$": storeCatalog
+                }
+            }, {new: true, upsert: true}).exec()
+        } else {
+            return this.storeModel.findOneAndUpdate({
+                'code': {$eq: id}
+            }, {
+                "$push": {
+                    "storeCatalogs": storeCatalog
+                }
+            }, {new: true, upsert: true}).exec()
+        }
     }
 }
