@@ -39,4 +39,4 @@ lerna-debug.log*
 
 # CSV Dump
 
-/data-set
+/data-set/*.csv
