@@ -37,7 +37,13 @@ export class StoreCatalog {
   weight?: number;
 
   @Prop()
-  price: number;
+  storePrice: number;
+
+  @Prop()
+  maximumRetailPrice: number;
+
+  @Prop()
+  quantity: number;
 
   @Prop()
   image: Image;

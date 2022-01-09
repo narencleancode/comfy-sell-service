@@ -1,6 +1,6 @@
-import {Controller, Get, Param, Query} from '@nestjs/common';
+import {Body, Controller, Get, Param, Post, Query} from '@nestjs/common';
 import {StoreService} from "./store.service";
-import {Store} from "../schema/store.schema";
+import {Store, StoreCatalog} from "../schema/store.schema";
 
 @Controller('store')
 export class StoreController {
@@ -9,5 +9,15 @@ export class StoreController {
   @Get(':id')
   async getStore(@Param('id') id: string): Promise<Store> {
     return await this.storeService.getStore(id);
+  }
+
+  @Post(':id/store-catalog')
+  async addStoreCatalog(@Param('id') id: string, @Body() storeCatalog: StoreCatalog) {
+    return await this.storeService.addStoreCatalog(id, storeCatalog);
+  }
+
+  @Post(':id/store-catalog/:productId')
+  async updateStoreCatalog(@Param('id') id: string, @Param('productId') productId: string, @Body() storeCatalog: StoreCatalog) {
+    return await this.storeService.updateStoreCatalog(id, productId, storeCatalog);
   }
 }
