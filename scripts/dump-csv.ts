@@ -7,11 +7,9 @@ import {
 } from '../src/schema/catalog.schema';
 import * as mongoose from 'mongoose';
 import {Store, StoreSchema} from "../src/schema/store.schema";
-import {StoreCatalog, StoreCatalogSchema} from "../src/schema/store-catalog.schema";
 
 const PRODUCT_CATALOG_CSV_FILE_NAME = '../data-set/sample-product-catalog.csv';
 const STORE_CSV_FILE_NAME = '../data-set/sample-store.csv';
-const STORE_CATALOG_CSV_FILE_NAME = '../data-set/sample-store-catalog.csv';
 
 config();
 
@@ -25,9 +23,6 @@ const PRODUCT_CATALOG_COLLECTION_NAME = 'productcatalog';
 const STORE_MODEL_NAME = 'Store';
 const STORE_COLLECTION_NAME = 'store';
 
-const STORE_CATALOG_MODEL_NAME = 'StoreCatalog';
-const STORE_CATALOG_COLLECTION_NAME = 'store_catalog';
-
 const CatalogModel = mongoose.model<ProductCatalog>(
   PRODUCT_CATALOG_MODEL_NAME,
   ProductCatalogSchema,
@@ -38,12 +33,6 @@ const StoreModel = mongoose.model<Store>(
     STORE_MODEL_NAME,
     StoreSchema,
     STORE_COLLECTION_NAME,
-);
-
-const StoreCatalogModel = mongoose.model<StoreCatalog>(
-    STORE_CATALOG_MODEL_NAME,
-    StoreCatalogSchema,
-    STORE_CATALOG_COLLECTION_NAME,
 );
 
 function getCsvData(fileName): Promise<any[]> {
@@ -85,27 +74,12 @@ async function seedData() {
   console.info('Transforming Store data');
   const storeData = storeCsvData.map(mapToStore);
 
-  console.info(`Drop existing product catalog collection ${STORE_COLLECTION_NAME}`);
+  console.info(`Drop existing store collection ${STORE_COLLECTION_NAME}`);
   await dropCollection(STORE_COLLECTION_NAME);
 
-  console.info('Saving product catalog to database');
+  console.info('Saving store collection to database');
   await Promise.all(
       storeData.map(async (row) => {
-        await addToDatabase(row);
-      }),
-  );
-
-  //Store Catalog
-  const storeCatalogCsvData = await getCsvData(STORE_CATALOG_CSV_FILE_NAME);
-  console.info('Transforming Store Catalog data');
-  const storeCatalogData = storeCatalogCsvData.map(mapToStoreCatalog);
-
-  console.info(`Drop existing product catalog collection ${STORE_CATALOG_COLLECTION_NAME}`);
-  await dropCollection(STORE_CATALOG_COLLECTION_NAME);
-
-  console.info('Saving product catalog to database');
-  await Promise.all(
-      storeCatalogData.map(async (row) => {
         await addToDatabase(row);
       }),
   );
@@ -141,18 +115,9 @@ function mapToStore(data) {
   };
   store.fulfilmentModes = [data.fulfilmentMode]
   store.paymentModes = [data.paymentMode]
+  store.storeCatalogs = [];
 
   return new StoreModel(store);
-}
-
-function mapToStoreCatalog(data) {
-  const storeCatalog = new StoreCatalog();
-
-  storeCatalog.storeCode = data.storeCode;
-  storeCatalog.catalogCode = data.catalogCode;
-  storeCatalog.qty = data.qty;
-
-  return new StoreCatalogModel(storeCatalog);
 }
 
 function getLeadingNumber(text: string): number {

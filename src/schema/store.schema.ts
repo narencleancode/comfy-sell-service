@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import {Image, ProductCatalog} from "./catalog.schema";
 
 export type StoreDocument = Store & Document;
 
@@ -15,6 +16,34 @@ export class Location {
   longitude: number;
 }
 
+@Schema()
+export class StoreCatalog {
+  @Prop()
+  productCode: string;
+
+  @Prop()
+  title: string;
+
+  @Prop()
+  category: string;
+
+  @Prop()
+  subCategory: string;
+
+  @Prop()
+  unit?: string;
+
+  @Prop()
+  weight?: number;
+
+  @Prop()
+  price: number;
+
+  @Prop()
+  image: Image;
+
+}
+
 @Schema({ collection: COLLECTION_NAME })
 export class Store {
   @Prop()
@@ -24,7 +53,7 @@ export class Store {
   name: string;
 
   @Prop()
-  type?: string;
+  type: string;
 
   @Prop()
   location: Location;
@@ -34,6 +63,9 @@ export class Store {
 
   @Prop()
   fulfilmentModes: Array<string>;
+
+  @Prop()
+  storeCatalogs: Array<StoreCatalog>
 }
 
 export const StoreSchema =

@@ -6,6 +6,9 @@ import { ProductCatalogController } from './product-catalog/product-catalog.cont
 import { ProductCatalogService } from './product-catalog/product-catalog.service';
 import { ProductCatalog, ProductCatalogSchema } from './schema/catalog.schema';
 import { ConfigModule } from '@nestjs/config';
+import { Store, StoreSchema } from "./schema/store.schema";
+import { StoreController } from "./store/store.controller";
+import { StoreService } from "./store/store.service";
 
 @Module({
   imports: [
@@ -15,9 +18,10 @@ import { ConfigModule } from '@nestjs/config';
     }),
     MongooseModule.forFeature([
       { name: ProductCatalog.name, schema: ProductCatalogSchema },
+      { name: Store.name, schema: StoreSchema },
     ]),
   ],
-  controllers: [AppController, ProductCatalogController],
-  providers: [AppService, ProductCatalogService],
+  controllers: [AppController, ProductCatalogController, StoreController],
+  providers: [AppService, ProductCatalogService, StoreService],
 })
 export class AppModule {}

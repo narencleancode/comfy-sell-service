@@ -39,6 +39,9 @@ export class ProductCatalog {
 
   @Prop()
   image: Image;
+
+  @Prop()
+  listingScore?: number;
 }
 
 const ProductCatalogSchema = SchemaFactory.createForClass(ProductCatalog);
