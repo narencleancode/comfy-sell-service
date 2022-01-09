@@ -19,7 +19,7 @@ export class ProductCatalog {
   @Prop()
   productCode: string;
 
-  @Prop()
+  @Prop({ index: true })
   title: string;
 
   @Prop()

@@ -18,7 +18,16 @@ export class ProductCatalogService {
       return this.searchProduct(searchTerm);
     }
 
-    return await this.productCatalogModel.find({}, null, { limit: 50 }).exec();
+    return await this.productCatalogModel
+      .find({})
+      .collation({
+        locale: 'en',
+      })
+      .sort({
+        title: 1,
+      })
+      .limit(50)
+      .exec();
   }
 
   async searchProduct(searchTerm: string): Promise<ProductCatalog[]> {
