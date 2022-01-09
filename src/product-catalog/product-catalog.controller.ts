@@ -7,7 +7,9 @@ export class ProductCatalogController {
   constructor(private readonly productCatalogService: ProductCatalogService) {}
 
   @Get()
-  async getProductCatalog(@Query('q') searchTerm?: string): Promise<ProductCatalog[]> {
+  async getProductCatalog(
+    @Query('q') searchTerm?: string,
+  ): Promise<ProductCatalog[]> {
     return await this.productCatalogService.getProductCatalog(searchTerm);
   }
 }

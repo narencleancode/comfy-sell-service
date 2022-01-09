@@ -14,7 +14,7 @@ export class ProductCatalogService {
   ) {}
 
   async getProductCatalog(searchTerm?: string): Promise<ProductCatalog[]> {
-    if (!!searchTerm && !!(searchTerm.trim())) {
+    if (!!searchTerm && !!searchTerm.trim()) {
       return this.searchProduct(searchTerm);
     }
 
@@ -22,12 +22,13 @@ export class ProductCatalogService {
   }
 
   async searchProduct(searchTerm: string): Promise<ProductCatalog[]> {
-    return await this.productCatalogModel.find({
-      $text: {
-        $search: searchTerm,
-      }
-    })
-    .limit(50)
-    .exec();
+    return await this.productCatalogModel
+      .find({
+        $text: {
+          $search: searchTerm,
+        },
+      })
+      .limit(50)
+      .exec();
   }
 }
