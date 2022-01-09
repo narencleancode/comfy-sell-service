@@ -6,8 +6,12 @@ import {
   ProductCatalog,
 } from '../src/schema/catalog.schema';
 import * as mongoose from 'mongoose';
+import {Store, StoreSchema} from "../src/schema/store.schema";
+import {StoreCatalog, StoreCatalogSchema} from "../src/schema/store-catalog.schema";
 
-const CSV_FILE_NAME = '../data-set/sample-product-catalog.csv';
+const PRODUCT_CATALOG_CSV_FILE_NAME = '../data-set/sample-product-catalog.csv';
+const STORE_CSV_FILE_NAME = '../data-set/sample-store.csv';
+const STORE_CATALOG_CSV_FILE_NAME = '../data-set/sample-store-catalog.csv';
 
 config();
 
@@ -15,20 +19,38 @@ console.log('Connecting to Database...');
 
 let mongooseConnection: mongoose.Mongoose;
 
-const MODEL_NAME = 'ProductCatalogs';
-const COLLECTION_NAME = 'productcatalog';
+const PRODUCT_CATALOG_MODEL_NAME = 'ProductCatalogs';
+const PRODUCT_CATALOG_COLLECTION_NAME = 'productcatalog';
+
+const STORE_MODEL_NAME = 'Store';
+const STORE_COLLECTION_NAME = 'store';
+
+const STORE_CATALOG_MODEL_NAME = 'StoreCatalog';
+const STORE_CATALOG_COLLECTION_NAME = 'store_catalog';
 
 const CatalogModel = mongoose.model<ProductCatalog>(
-  MODEL_NAME,
+  PRODUCT_CATALOG_MODEL_NAME,
   ProductCatalogSchema,
-  COLLECTION_NAME,
+  PRODUCT_CATALOG_COLLECTION_NAME,
 );
 
-function getCsvData(): Promise<any[]> {
+const StoreModel = mongoose.model<Store>(
+    STORE_MODEL_NAME,
+    StoreSchema,
+    STORE_COLLECTION_NAME,
+);
+
+const StoreCatalogModel = mongoose.model<StoreCatalog>(
+    STORE_CATALOG_MODEL_NAME,
+    StoreCatalogSchema,
+    STORE_CATALOG_COLLECTION_NAME,
+);
+
+function getCsvData(fileName): Promise<any[]> {
   console.log('Parsing CSV');
   return new Promise((resolve, reject) => {
     const results = [];
-    createReadStream(`${__dirname}/${CSV_FILE_NAME}`)
+    createReadStream(`${__dirname}/${fileName}`)
       .pipe(csv())
       .on('data', (data) => results.push(data))
       .on('end', () => {
@@ -43,18 +65,49 @@ async function seedData() {
     dbName: process.env.DB_NAME,
   });
 
-  const csvData = await getCsvData();
-  console.info('Transforming data');
-  const catalogData = csvData.map(mapToCatalog);
+  //Product Catalog
+  const productCatalogCsvData = await getCsvData(PRODUCT_CATALOG_CSV_FILE_NAME);
+  console.info('Transforming Product Catalog data');
+  const catalogData = productCatalogCsvData.map(mapToCatalog);
 
-  console.info(`Drop existing collection ${COLLECTION_NAME}`);
-  await dropCollection(COLLECTION_NAME);
+  console.info(`Drop existing product catalog collection ${PRODUCT_CATALOG_COLLECTION_NAME}`);
+  await dropCollection(PRODUCT_CATALOG_COLLECTION_NAME);
 
-  console.info('Saving to database');
+  console.info('Saving product catalog to database');
   await Promise.all(
     catalogData.map(async (row) => {
       await addToDatabase(row);
     }),
+  );
+
+  //Store
+  const storeCsvData = await getCsvData(STORE_CSV_FILE_NAME);
+  console.info('Transforming Store data');
+  const storeData = storeCsvData.map(mapToStore);
+
+  console.info(`Drop existing product catalog collection ${STORE_COLLECTION_NAME}`);
+  await dropCollection(STORE_COLLECTION_NAME);
+
+  console.info('Saving product catalog to database');
+  await Promise.all(
+      storeData.map(async (row) => {
+        await addToDatabase(row);
+      }),
+  );
+
+  //Store Catalog
+  const storeCatalogCsvData = await getCsvData(STORE_CATALOG_CSV_FILE_NAME);
+  console.info('Transforming Store Catalog data');
+  const storeCatalogData = storeCatalogCsvData.map(mapToStoreCatalog);
+
+  console.info(`Drop existing product catalog collection ${STORE_CATALOG_COLLECTION_NAME}`);
+  await dropCollection(STORE_CATALOG_COLLECTION_NAME);
+
+  console.info('Saving product catalog to database');
+  await Promise.all(
+      storeCatalogData.map(async (row) => {
+        await addToDatabase(row);
+      }),
   );
 }
 
@@ -74,6 +127,32 @@ function mapToCatalog(data) {
   };
 
   return new CatalogModel(catalog);
+}
+
+function mapToStore(data) {
+  const store = new Store();
+
+  store.code = data.code;
+  store.name = data.name;
+  store.type = data.type;
+  store.location = {
+    latitude: data.lat,
+    longitude: data.lon
+  };
+  store.fulfilmentModes = [data.fulfilmentMode]
+  store.paymentModes = [data.paymentMode]
+
+  return new StoreModel(store);
+}
+
+function mapToStoreCatalog(data) {
+  const storeCatalog = new StoreCatalog();
+
+  storeCatalog.storeCode = data.storeCode;
+  storeCatalog.catalogCode = data.catalogCode;
+  storeCatalog.qty = data.qty;
+
+  return new StoreCatalogModel(storeCatalog);
 }
 
 function getLeadingNumber(text: string): number {
