@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { ProductCatalog } from 'src/schema/catalog.schema';
 import { ProductCatalogService } from './product-catalog.service';
 
@@ -7,7 +7,7 @@ export class ProductCatalogController {
   constructor(private readonly productCatalogService: ProductCatalogService) {}
 
   @Get()
-  async getProductCatalog(): Promise<ProductCatalog[]> {
-    return await this.productCatalogService.getProductCatalog();
+  async getProductCatalog(@Query('q') searchTerm?: string): Promise<ProductCatalog[]> {
+    return await this.productCatalogService.getProductCatalog(searchTerm);
   }
 }

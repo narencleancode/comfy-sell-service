@@ -13,7 +13,21 @@ export class ProductCatalogService {
     private productCatalogModel: Model<ProductCatalogDocument>,
   ) {}
 
-  async getProductCatalog(): Promise<ProductCatalog[]> {
+  async getProductCatalog(searchTerm?: string): Promise<ProductCatalog[]> {
+    if (!!searchTerm && !!(searchTerm.trim())) {
+      return this.searchProduct(searchTerm);
+    }
+
     return await this.productCatalogModel.find({}, null, { limit: 50 }).exec();
+  }
+
+  async searchProduct(searchTerm: string): Promise<ProductCatalog[]> {
+    return await this.productCatalogModel.find({
+      $text: {
+        $search: searchTerm,
+      }
+    })
+    .limit(50)
+    .exec();
   }
 }

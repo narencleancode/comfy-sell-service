@@ -41,5 +41,21 @@ export class ProductCatalog {
   image: Image;
 }
 
-export const ProductCatalogSchema =
+const ProductCatalogSchema =
   SchemaFactory.createForClass(ProductCatalog);
+
+ProductCatalogSchema.index({
+    productCode: 'text',
+    title: 'text',
+    category: 'text',
+    subCategory: 'text'
+},  {
+    weights: {
+        productCode: 15,
+        title: 10,
+        subCategory: 5,
+        category: 3
+    }
+})
+
+export { ProductCatalogSchema };
