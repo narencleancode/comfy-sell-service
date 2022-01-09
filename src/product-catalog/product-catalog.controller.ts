@@ -9,15 +9,9 @@ export class ProductCatalogController {
   @Get()
   async getProductCatalog(
     @Query('q') searchTerm?: string,
+    @Query('filterBy') filterBy?: CatalogFilterBy,
     @Query('page') page: number = 1,
   ): Promise<ProductCatalog[]> {
-    return await this.productCatalogService.getProductCatalog(searchTerm, page);
-  }
-
-  @Get('curated-list')
-  async getCuratedProductCatalogs(
-      @Query('count') count: number = 20,
-  ): Promise<ProductCatalog[]> {
-    return await this.productCatalogService.getCuratedProductCatalog(count);
+    return await this.productCatalogService.getProductCatalog(searchTerm, filterBy, page);
   }
 }

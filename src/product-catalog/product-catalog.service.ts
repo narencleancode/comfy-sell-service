@@ -17,28 +17,17 @@ export class ProductCatalogService {
 
   async getProductCatalog(
     searchTerm?: string,
+    filterBy?: CatalogFilterBy,
     page?: number,
   ): Promise<ProductCatalog[]> {
-    return this.withPagination(this.getQuery(searchTerm), page).exec();
+    return this.withPagination(this.getQuery(searchTerm, filterBy), page).exec();
   }
 
-  async getCuratedProductCatalog(
-      count: number,
-  ): Promise<ProductCatalog[]> {
-    return this.productCatalogModel
-        .find({})
-        .collation({
-          locale: 'en',
-        })
-        .sort({
-          listingScore: -1,
-        })
-        .limit(count);
-  }
-
-  private getQuery(searchTerm?: string) {
+  private getQuery(searchTerm?: string, filterBy?: CatalogFilterBy) {
     if (!!searchTerm && !!searchTerm.trim()) {
       return this.getQueryForSearch(searchTerm);
+    } else if(filterBy == CatalogFilterBy.CURATED_LIST) {
+      return this.getQueryForCuratedProducts()
     }
 
     return this.getQueryForAllProducts();
@@ -53,6 +42,17 @@ export class ProductCatalogService {
       .sort({
         title: 1,
       });
+  }
+
+  private getQueryForCuratedProducts() {
+    return this.productCatalogModel
+        .find({})
+        .collation({
+          locale: 'en',
+        })
+        .sort({
+          listingScore: -1,
+        });
   }
 
   private getQueryForSearch(searchTerm: string) {
