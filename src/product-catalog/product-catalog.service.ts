@@ -32,7 +32,7 @@ export class ProductCatalogService {
     private getQuery(searchTerm?: string, filterBy?: string) {
         if (!!searchTerm && !!searchTerm.trim()) {
             return this.getQueryForSearch(searchTerm);
-        } else if (filterBy == 'CURATED_LIST') {
+        } else if (filterBy == 'Curated List') {
             return this.getQueryForCuratedProducts()
         }
 

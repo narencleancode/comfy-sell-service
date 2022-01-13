@@ -6,7 +6,7 @@ import {
   ProductCatalog,
 } from '../src/schema/catalog.schema';
 import * as mongoose from 'mongoose';
-import {Store, StoreSchema} from "../src/schema/store.schema";
+import { Store, StoreSchema } from '../src/schema/store.schema';
 
 const PRODUCT_CATALOG_CSV_FILE_NAME = '../data-set/sample-product-catalog.csv';
 const STORE_CSV_FILE_NAME = '../data-set/sample-store.csv';
@@ -30,9 +30,9 @@ const CatalogModel = mongoose.model<ProductCatalog>(
 );
 
 const StoreModel = mongoose.model<Store>(
-    STORE_MODEL_NAME,
-    StoreSchema,
-    STORE_COLLECTION_NAME,
+  STORE_MODEL_NAME,
+  StoreSchema,
+  STORE_COLLECTION_NAME,
 );
 
 function getCsvData(fileName): Promise<any[]> {
@@ -59,7 +59,9 @@ async function seedData() {
   console.info('Transforming Product Catalog data');
   const catalogData = productCatalogCsvData.map(mapToCatalog);
 
-  console.info(`Drop existing product catalog collection ${PRODUCT_CATALOG_COLLECTION_NAME}`);
+  console.info(
+    `Drop existing product catalog collection ${PRODUCT_CATALOG_COLLECTION_NAME}`,
+  );
   await dropCollection(PRODUCT_CATALOG_COLLECTION_NAME);
 
   console.info('Saving product catalog to database');
@@ -79,9 +81,9 @@ async function seedData() {
 
   console.info('Saving store collection to database');
   await Promise.all(
-      storeData.map(async (row) => {
-        await addToDatabase(row);
-      }),
+    storeData.map(async (row) => {
+      await addToDatabase(row);
+    }),
   );
 }
 
@@ -111,10 +113,10 @@ function mapToStore(data) {
   store.type = data.type;
   store.location = {
     latitude: data.lat,
-    longitude: data.lon
+    longitude: data.lon,
   };
-  store.fulfilmentModes = [data.fulfilmentMode]
-  store.paymentModes = [data.paymentMode]
+  store.fulfilmentModes = [data.fulfilmentMode];
+  store.paymentModes = [data.paymentMode];
   store.storeCatalogs = [];
 
   return new StoreModel(store);
