@@ -15,4 +15,9 @@ export class StoreController {
   async addStoreCatalog(@Param('id') id: string, @Body() storeCatalog: StoreCatalog) {
     return await this.storeService.addStoreCatalog(id, storeCatalog);
   }
+
+  @Post(':id/store-catalog/:productCode')
+  async addStoreCatalogByProductCode(@Param('id') id: string, @Param('productCode') productCode: string) {
+    return await this.storeService.addStoreCatalogByProductId(id, productCode);
+  }
 }

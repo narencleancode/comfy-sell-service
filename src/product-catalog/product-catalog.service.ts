@@ -21,8 +21,8 @@ export class ProductCatalogService {
         return this.withPagination(this.getQuery(searchTerm, filterBy), page).exec();
     }
 
-    async updateProductListedScore(id: string) {
-        await this.productCatalogModel.findOneAndUpdate({
+    async updateListedScoreAndGet(id: string): Promise<ProductCatalog> {
+        return await this.productCatalogModel.findOneAndUpdate({
             'productCode': {$eq: id}
         }, {
             $inc: {'listingScore': 1}
