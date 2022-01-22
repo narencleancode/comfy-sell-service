@@ -26,6 +26,9 @@ export class StoreService {
         (value) => value.productCode == storeCatalog.productCode,
       )
     ) {
+        await this.productCatalogService.updateListedScoreAndGet(
+            storeCatalog.productCode,
+        );
       return this.storeModel
         .findOneAndUpdate(
           {
