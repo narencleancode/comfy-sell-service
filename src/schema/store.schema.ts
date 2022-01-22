@@ -1,9 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import {Image, ProductCatalog} from "./catalog.schema";
+import { Image, ProductCatalog } from './catalog.schema';
 
 export type StoreDocument = Store & Document;
-
 
 const COLLECTION_NAME = 'store';
 
@@ -49,7 +48,7 @@ export class StoreCatalog {
   image: Image;
 
   public static fromProduct(product: ProductCatalog) {
-    const storeCatalog = new StoreCatalog()
+    const storeCatalog = new StoreCatalog();
     storeCatalog.productCode = product.productCode;
     storeCatalog.title = product.title;
     storeCatalog.category = product.category;
@@ -60,10 +59,9 @@ export class StoreCatalog {
     storeCatalog.storePrice = product.maximumRetailPrice;
     storeCatalog.unit = product.unit;
     storeCatalog.weight = product.weight;
-    
+
     return storeCatalog;
   }
-
 }
 
 @Schema({ collection: COLLECTION_NAME })
@@ -87,8 +85,7 @@ export class Store {
   fulfilmentModes: Array<string>;
 
   @Prop()
-  storeCatalogs: Array<StoreCatalog>
+  storeCatalogs: Array<StoreCatalog>;
 }
 
-export const StoreSchema =
-  SchemaFactory.createForClass(Store);
+export const StoreSchema = SchemaFactory.createForClass(Store);

@@ -6,9 +6,9 @@ import { ProductCatalogController } from './product-catalog/product-catalog.cont
 import { ProductCatalogService } from './product-catalog/product-catalog.service';
 import { ProductCatalog, ProductCatalogSchema } from './schema/catalog.schema';
 import { ConfigModule } from '@nestjs/config';
-import { Store, StoreSchema } from "./schema/store.schema";
-import { StoreController } from "./store/store.controller";
-import { StoreService } from "./store/store.service";
+import { Store, StoreSchema } from './schema/store.schema';
+import { StoreController } from './store/store.controller';
+import { StoreService } from './store/store.service';
 
 @Module({
   imports: [
