@@ -9,13 +9,10 @@ export class ProductCatalogController {
   @Get()
   async getProductCatalog(
     @Query('q') searchTerm?: string,
+    @Query('multiQuery') searchArray?: string,
     @Query('filterBy') filterBy?: string,
     @Query('page') page: number = 1,
   ): Promise<ProductCatalog[]> {
-    return await this.productCatalogService.getProductCatalog(
-      searchTerm,
-      filterBy,
-      page,
-    );
+    return await this.productCatalogService.getProductCatalog(searchTerm, searchArray ? searchArray.split(",") : undefined, filterBy, page);
   }
 }
