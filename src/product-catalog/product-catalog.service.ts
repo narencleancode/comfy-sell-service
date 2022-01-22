@@ -5,6 +5,7 @@ import {
   ProductCatalog,
   ProductCatalogDocument,
 } from 'src/schema/catalog.schema';
+import {ProductItemDto} from "../dto/product-item.dto";
 
 const DEFAULT_PAGINATION_COUNT = 25;
 
@@ -19,7 +20,7 @@ export class ProductCatalogService {
     searchTerm?: string,
     filterBy?: string,
     page?: number,
-  ): Promise<ProductCatalog[]> {
+  ): Promise<ProductItemDto[]> {
     return this.withPagination(
       this.getQuery(searchTerm, filterBy),
       page,

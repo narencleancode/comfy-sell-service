@@ -49,5 +49,5 @@ $ yarn run test:cov
 Add the provided `catalog_sample.csv` into `scripts` directory and run
 ```bash
 # seed data
-yarn loadData
+yarn dump-product-catalog
 ```
