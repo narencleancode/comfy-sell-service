@@ -11,8 +11,9 @@ export class ProductCatalogController {
     @Query('q') searchTerm?: string,
     @Query('multiQuery') searchArray?: string,
     @Query('filterBy') filterBy?: string,
+    @Query('categories') categories?: string[],
     @Query('page') page: number = 1,
   ): Promise<ProductCatalog[]> {
-    return await this.productCatalogService.getProductCatalog(searchTerm, searchArray ? searchArray.split(",") : undefined, filterBy, page);
+    return await this.productCatalogService.getProductCatalog(searchTerm, searchArray ? searchArray.split(",") : undefined, filterBy, categories, page);
   }
 }

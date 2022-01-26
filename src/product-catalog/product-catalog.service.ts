@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Query } from 'mongoose';
+import { FilterQuery, Model, Query } from 'mongoose';
 import { ProductCatalog, ProductCatalogDocument, } from 'src/schema/catalog.schema';
 
 const DEFAULT_PAGINATION_COUNT = 25;
@@ -25,15 +25,15 @@ export class ProductCatalogService {
             .exec();
     }
 
-    private getQuery(searchTerm?: string, filterBy?: string) {
+    private getQuery(searchTerm?: string, filterBy?: string, categories?: string[]) {
         if (!!searchTerm && !!searchTerm.trim()) {
-            return this.getQueryForSearch(searchTerm);
+            return this.getQueryForSearch(searchTerm, categories);
         } else if (filterBy == 'Curated List') {
-            return this.getQueryForCuratedProducts();
+            return this.getQueryForCuratedProducts(categories);
         }
     }
 
-    async getProductCatalog(searchTerm?: string, searchArray?: string[], filterBy?: string, page?: number): Promise<ProductCatalog[]> {
+    async getProductCatalog(searchTerm?: string, searchArray?: string[], filterBy?: string, categories?: string[], page?: number): Promise<ProductCatalog[]> {
         if (searchArray && searchArray.length > 0) {
             return await searchArray.reduce(async (catalog: Promise<ProductCatalog[]>, currentSearchText: string) => {
                 const currentCatalog = await this.getQueryForSearch(currentSearchText).limit(4).exec();
@@ -50,7 +50,7 @@ export class ProductCatalogService {
                 return await [...catalogUpdate, ...accumulatedCatalog];
             }, Promise.resolve([]));
         }
-        return this.withPagination(this.getQuery(searchTerm, filterBy), page).exec();
+        return this.withPagination(this.getQuery(searchTerm, filterBy, categories), page).exec();
     }
 
     transformToHash(catalog: ProductCatalog[]) {
@@ -68,23 +68,33 @@ export class ProductCatalogService {
         }).exec();
     }
 
-    private getQueryForCuratedProducts() {
+    private getQueryForCuratedProducts(categories?: string[]) {
         return this.productCatalogModel
-            .find({})
+            .find(this.withCategoryFilter({}, categories))
             .collation({
                 locale: 'en',
             })
             .sort({
                 listingScore: -1,
+                title: 1
             });
     }
 
-    private getQueryForSearch(searchTerm: string) {
-        return this.productCatalogModel.find({
+    private getQueryForSearch(searchTerm: string, categories?: string[]) {
+        return this.productCatalogModel.find(this.withCategoryFilter({
             $text: {
                 $search: searchTerm,
             },
-        });
+        }, categories));
+    }
+
+    private withCategoryFilter(filterQuery: FilterQuery<ProductCatalogDocument>, categories?: string[]) {
+        if (!!categories && categories.length > 0) {
+            filterQuery.category = {
+                $in: categories
+            }
+        }
+        return filterQuery;
     }
 
     private withPagination(query: Query<any, any, any, any>, page: number) {
