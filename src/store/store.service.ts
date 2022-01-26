@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Store, StoreCatalog, StoreDocument } from '../schema/store.schema';
 import { ProductCatalogService } from '../product-catalog/product-catalog.service';
-import {ProductItemDto} from "../dto/product-item.dto";
+import { ProductItemDto } from '../dto/product-item.dto';
 
 @Injectable()
 export class StoreService {
@@ -12,12 +12,16 @@ export class StoreService {
     private productCatalogService: ProductCatalogService,
   ) {}
 
-    async getStoreCatalogItems(id: string): Promise<ProductItemDto[]> {
-        return this.storeModel.findOne({code: {$eq: id}}).exec()
-            .then(value => value.storeCatalogs
-                .map((storeCatalog, index) => new ProductItemDto(storeCatalog))
-            );
-    }
+  async getStoreCatalogItems(id: string): Promise<ProductItemDto[]> {
+    return this.storeModel
+      .findOne({ code: { $eq: id } })
+      .exec()
+      .then((value) =>
+        value.storeCatalogs.map(
+          (storeCatalog, index) => new ProductItemDto(storeCatalog),
+        ),
+      );
+  }
 
   async addStoreCatalog(id: string, storeCatalog: StoreCatalog) {
     const store = await this.storeModel.findOne({ code: { $eq: id } }).exec();
@@ -26,9 +30,9 @@ export class StoreService {
         (value) => value.productCode == storeCatalog.productCode,
       )
     ) {
-        await this.productCatalogService.updateListedScoreAndGet(
-            storeCatalog.productCode,
-        );
+      await this.productCatalogService.updateListedScoreAndGet(
+        storeCatalog.productCode,
+      );
       return this.storeModel
         .findOneAndUpdate(
           {

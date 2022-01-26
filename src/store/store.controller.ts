@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { StoreService } from './store.service';
 import { Store, StoreCatalog } from '../schema/store.schema';
-import {ProductItemDto} from "../dto/product-item.dto";
+import { ProductItemDto } from '../dto/product-item.dto';
 
 @Controller('store')
 export class StoreController {

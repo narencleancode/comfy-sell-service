@@ -14,6 +14,12 @@ export class ProductCatalogController {
     @Query('categories') categories?: string[],
     @Query('page') page: number = 1,
   ): Promise<ProductCatalog[]> {
-    return await this.productCatalogService.getProductCatalog(searchTerm, searchArray ? searchArray.split(",") : undefined, filterBy, categories, page);
+    return await this.productCatalogService.getProductCatalog(
+      searchTerm,
+      searchArray ? searchArray.split(',') : undefined,
+      filterBy,
+      categories,
+      page,
+    );
   }
 }
