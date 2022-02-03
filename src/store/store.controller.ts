@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { StoreService } from './store.service';
 import { Store, StoreCatalog } from '../schema/store.schema';
 import { ProductItemDto } from '../dto/product-item.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('store')
 export class StoreController {
@@ -26,5 +27,13 @@ export class StoreController {
     @Param('productCode') productCode: string,
   ) {
     return await this.storeService.addStoreCatalogByProductId(id, productCode);
+  }
+
+  @UseInterceptors(FileInterceptor('file', {dest: './upload'}))
+  @Post('bulk-upload')
+  async addMultipleProductsByFileUpload(
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return await this.storeService.addMultipleProductsByFileUpload(file);
   }
 }
