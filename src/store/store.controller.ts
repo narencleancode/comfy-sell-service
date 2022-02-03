@@ -34,6 +34,8 @@ export class StoreController {
   async addMultipleProductsByFileUpload(
     @UploadedFile() file: Express.Multer.File,
   ) {
-    return await this.storeService.addMultipleProductsByFileUpload(file);
+    return {
+      successfulUploads: await this.storeService.addMultipleProductsByFileUpload(file)
+    };
   }
 }

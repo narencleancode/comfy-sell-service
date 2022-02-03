@@ -111,10 +111,14 @@ export class StoreService {
       raw: true
     });
     let successfulUploads = 0;
+    const multipleUploadPromiseArray = [];
 
-    for(let i=1; i <sheetData.length; i++) {
-      await this.addStoreCatalogByProductId('8888', sheetData[i][0]).then(res => successfulUploads++).catch(err => console.log(err));
-    }
+    sheetData.forEach((row: any, index) => {
+      if (index !==0) {
+        multipleUploadPromiseArray.push(this.addStoreCatalogByProductId('8888', row[0]).then(res => successfulUploads++).catch(err => console.log(err)));
+      }
+    });
+    await Promise.all(multipleUploadPromiseArray);
     return successfulUploads;
   }
 }
