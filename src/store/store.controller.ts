@@ -30,7 +30,7 @@ export class StoreController {
   }
 
   @UseInterceptors(FileInterceptor('file', {dest: './upload'}))
-  @Post('bulk-upload')
+  @Post(':id/bulk-upload')
   async addMultipleProductsByFileUpload(
     @UploadedFile() file: Express.Multer.File,
   ) {
