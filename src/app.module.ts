@@ -9,6 +9,7 @@ import { ConfigModule } from '@nestjs/config';
 import { Store, StoreSchema } from './schema/store.schema';
 import { StoreController } from './store/store.controller';
 import { StoreService } from './store/store.service';
+import { SpeechRecognitionModule } from './speech-recognition/speech-recognition.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { StoreService } from './store/store.service';
       { name: ProductCatalog.name, schema: ProductCatalogSchema },
       { name: Store.name, schema: StoreSchema },
     ]),
+    SpeechRecognitionModule,
   ],
   controllers: [AppController, ProductCatalogController, StoreController],
   providers: [AppService, ProductCatalogService, StoreService],
