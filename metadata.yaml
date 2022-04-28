@@ -3,6 +3,8 @@ kind: Component
 metadata:
   name: comfy-sell-service
   description: Backend Service to retrieve and write seller/product information
+  annotations:
+    backstage.io/techdocs-ref: dir:.
   tags:
     - java
     - data
